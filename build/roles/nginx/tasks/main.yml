@@ -1,0 +1,45 @@
+---
+- name: Add PHP7 PPA
+  apt_repository: 
+    repo: ppa:ondrej/php
+    update_cache: true
+
+- name: Install PHP7 and Git
+  apt: name={{ item }} state=installed
+  with_items:
+  - php7.0
+  - php7.0-fpm
+  - git
+  - php7.0-xml # required for PhpUnit
+  - php7.0-mbstring # required for PhpUnit
+  - unzip # to speed up composer installation (defaults to git if cannot unzip)
+
+- name: Install nginx
+  apt: name=nginx state=installed
+  register: nginx_installed
+
+- name: Delete default site (if needed)
+  file: dest=/etc/nginx/sites-enabled/default state=absent
+  when: nginx_installed.changed
+
+- name: Place a server configuration
+  template: src=tictactoe.conf dest=/etc/nginx/sites-available/
+  register: server_configuration
+
+- name: Enable server
+  file: src=/etc/nginx/sites-available/tictactoe.conf dest=/etc/nginx/sites-enabled/tictactoe.conf state=link
+  register: server_state
+
+- name: Reload nginx if configuration changed
+  when: server_configuration.changed || server_state.changed
+  service: name=nginx state=reloaded
+
+- name: Put composer installer on the server
+  copy: src=files/composer-installer dest=/tmp
+
+- name: Install composer globally (/usr/local/bin)
+  command: php composer-installer --install-dir=/usr/local/bin --filename=composer
+  args:
+    chdir: /tmp
+    creates: /usr/local/bin/composer
+
