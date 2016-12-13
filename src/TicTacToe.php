@@ -29,12 +29,31 @@ class TicTacToe implements MoveInterface
 
         $moves = $this->findAvailableMoves($boardState);
         // pick first one
-        return $moves[0];
+        return array_merge($moves[0], [$playerUnit]);
     }
 
     private function findAvailableMoves($boardState)
     {
-        // flatten board
-        array_reduce($)
+        $flat_board = [];
+
+        for ($i = 0; $i <= 2; $i++) {
+            for ($n = 0; $n <= 2; $n++) {
+                $value = $boardState[$i][$n];
+                if ($value === '') {
+                    $flat_board[] = '_';
+                } else {
+                    $flat_board[] = $value;
+                }
+            }
+        }
+        $callback = function($value, $key) {
+            return ($value == '_');
+        };
+        $keys = array_filter($flat_board, $callback, ARRAY_FILTER_USE_BOTH);
+        $moves = [];
+        foreach (array_keys($keys) as $index) {
+            $moves[] = [floor($index / 3), $index % 3];
+        }
+        return $moves;
     }
 }

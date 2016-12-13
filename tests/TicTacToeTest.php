@@ -4,8 +4,12 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
 {
     public function movesProvider()
     {
-        $empty_board = array_fill(0, 3, array_fill(0, 3, ''));
-        $full_board = array_fill(0, 3, array_fill(0, 3, 'X'));
+        $empty_row = array_fill(0, 3, '');
+        $full_row = array_fill(0, 3, 'X');
+
+        $empty_board = array_fill(0, 3, $empty_row);
+        
+        $full_board = array_fill(0, 3, $full_row);
         $full_board[2][2] = '';
 
         return [
@@ -18,6 +22,11 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
                 'board' => $full_board,
                 'player' => 'X',
                 'expected_move' => [2, 2, 'X']
+            ],
+            "half full board" => [
+                'board' => [$full_row, $empty_row, $empty_row],
+                'player' => 'O',
+                'expected_move' => [1, 0, 'O']                
             ]
         ];
     }
