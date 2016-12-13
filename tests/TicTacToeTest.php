@@ -8,14 +8,14 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
         $full_row = array_fill(0, 3, 'X');
 
         $empty_board = array_fill(0, 3, $empty_row);
-        
+
         $full_board = array_fill(0, 3, $full_row);
         $full_board[2][2] = '';
 
         return [
             "empty board" => [
-                'board' => $empty_board, 
-                'player' => 'X', 
+                'board' => $empty_board,
+                'player' => 'X',
                 "expected_move" => [0, 0, 'X']
             ],
             "only move" => [
@@ -26,7 +26,7 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
             "half full board" => [
                 'board' => [$full_row, $empty_row, $empty_row],
                 'player' => 'O',
-                'expected_move' => [1, 0, 'O']                
+                'expected_move' => [1, 0, 'O']
             ]
         ];
     }

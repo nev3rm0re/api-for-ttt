@@ -12,19 +12,20 @@ class Board
     protected function isValid($board_state)
     {
         // check dimensions first: must be 3x3
-        if (
-            !is_array($board_state) || 
-            count($filtered = array_filter(
-                $board_state, 
-                function($el) { 
-                    return is_array($el) && count($el) == 3;
-                })
+        if (!is_array($board_state)
+            || count(
+                array_filter(
+                    $board_state,
+                    function ($el) {
+                        return is_array($el) && count($el) == 3;
+                    }
+                )
             ) != 3
         ) {
             return false;
         }
-        
-        return true;  
+
+        return true;
     }
 
     protected $flat_board;
@@ -52,7 +53,7 @@ class Board
 
     public function findAvailableMoves()
     {
-        $callback = function($value, $key) {
+        $callback = function ($value, $key) {
             return ($value == '_');
         };
         $keys = array_filter($this->flat_board, $callback, ARRAY_FILTER_USE_BOTH);

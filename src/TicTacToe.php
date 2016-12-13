@@ -3,7 +3,7 @@ namespace Egoh;
 
 class TicTacToe implements MoveInterface
 {
-    public function makeMove($boardState, $playerUnit = 'X'): array 
+    public function makeMove($boardState, $playerUnit = 'X'): array
     {
         $board = new Board(3);
         $board->fromArray($boardState);
