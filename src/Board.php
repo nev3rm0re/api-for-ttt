@@ -3,15 +3,37 @@ namespace Egoh;
 
 class Board
 {
-    private $size;
+    protected $size;
     public function __construct($size = 3)
     {
         $this->size = $size;
     }
 
-    private $flat_board;
+    protected function isValid($board_state)
+    {
+        // check dimensions first: must be 3x3
+        if (
+            !is_array($board_state) || 
+            count($filtered = array_filter(
+                $board_state, 
+                function($el) { 
+                    return is_array($el) && count($el) == 3;
+                })
+            ) != 3
+        ) {
+            return false;
+        }
+        
+        return true;  
+    }
+
+    protected $flat_board;
     public function fromArray($board_state)
     {
+        if (!$this->isValid($board_state)) {
+            throw new \Exception("Invalid board");
+        }
+
         $flat_board = [];
 
         for ($i = 0; $i <= 2; $i++) {
