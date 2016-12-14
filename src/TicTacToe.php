@@ -9,6 +9,11 @@ class TicTacToe implements MoveInterface
         $board->fromArray($boardState);
 
         $moves = $board->findAvailableMoves();
+
+        if (empty($moves)) {
+            return [];
+        }
+
         // pick first one
         return array_merge($moves[0], [$playerUnit]);
     }
