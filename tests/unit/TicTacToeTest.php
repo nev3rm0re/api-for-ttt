@@ -27,6 +27,11 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
                 'board' => [$full_row, $empty_row, $empty_row],
                 'player' => 'O',
                 'expected_move' => [1, 0, 'O']
+            ],
+            "full board" => [
+                'board' => [$full_row, $full_row, $full_row],
+                'player' => 'O',
+                'expected_move' => []
             ]
         ];
     }
