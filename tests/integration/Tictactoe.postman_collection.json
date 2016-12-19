@@ -1,0 +1,127 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Tictactoe",
+		"_postman_id": "55583e16-806b-6905-3e79-f37b06862b04",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Make a move on an empty board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
+							"var jsonrpc_schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"jsonrpc\": \"string\",",
+							"        \"result\": \"string\",",
+							"        \"id\": \"string\"",
+							"    },",
+							"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
+							"}",
+							"var move_schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-04/schema\",",
+							"    \"type\": \"array\",",
+							"    \"items\": [",
+							"        {",
+							"            \"type\": \"number\",",
+							"            \"minimum\": 0,",
+							"            \"maximum\": 2",
+							"        },",
+							"        {",
+							"            \"type\": \"number\",",
+							"            \"minimum\": 0,",
+							"            \"maximum\": 2",
+							"        },",
+							"        {",
+							"            \"type\": \"string\",",
+							"            \"enum\": [\"O\", \"X\"]",
+							"        }",
+							"  ]",
+							"};",
+							"",
+							"var response = JSON.parse(responseBody);",
+							"// Make sure we are following JSON-RPC standard",
+							"tests[\"Response looks like jsonrpc\"] = tv4.validate(response, jsonrpc_schema);",
+							"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"001\");",
+							"",
+							"tests[\"Result looks like a move\"] = tv4.validate(response.result, move_schema);",
+							"",
+							"// Some business-logic tests",
+							"tests[\"Move is for the player token provided\"] = (response.result[2] === 'X');"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/index.php/jsonrpc/v1/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"\", \"\", \"\"], \n\t\t  \t[\"\", \"\", \"\"], \n\t\t  \t[\"\", \"\", \"\"]\n\t\t],\n\t\t\"player\": \"X\"\n\t},\n\t\"id\": \"001\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Make a move on a full board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
+							"var jsonrpc_error_schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"jsonrpc\": \"string\",",
+							"        \"result\": \"string\",",
+							"        \"error\": \"any\",",
+							"        \"id\": \"string\"",
+							"    },",
+							"    \"required\": [\"jsonrpc\", \"error\", \"id\"]",
+							"}",
+							"",
+							"var response = JSON.parse(responseBody);",
+							"// Make sure we are following JSON-RPC standard",
+							"tests[\"Response looks like jsonrpc error\"] = tv4.validate(response, jsonrpc_error_schema);",
+							"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"002\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/index.php/jsonrpc/v1/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"X\", \"X\", \"X\"], \n\t\t  \t[\"X\", \"X\", \"X\"], \n\t\t  \t[\"X\", \"X\", \"X\"]\n\t\t],\n\t\t\"player\": \"O\"\n\t},\n\t\"id\": \"002\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
