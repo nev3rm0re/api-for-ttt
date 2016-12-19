@@ -1,6 +1,6 @@
 ---
 - name: Add PHP7 PPA
-  apt_repository: 
+  apt_repository:
     repo: ppa:ondrej/php
     update_cache: true
 
@@ -31,7 +31,7 @@
   register: server_state
 
 - name: Reload nginx if configuration changed
-  when: server_configuration.changed || server_state.changed
+  when: server_configuration.changed or server_state.changed
   service: name=nginx state=reloaded
 
 - name: Put composer installer on the server
