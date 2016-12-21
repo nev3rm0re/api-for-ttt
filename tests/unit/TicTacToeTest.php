@@ -54,24 +54,22 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
         $full_row = array_fill(0, 3, 'X');
 
         return [
-            "bad format" => [
+            "bad format - empty string" => [
                 ""
             ],
-            "no player 2" => [
-                [['X', 'X', ''], $empty_row, $empty_row]
-            ],
-            "too little of player 1" => [
-                [['O', 'O', 'O'], ['O', 'X', 'X'], $empty_row]
-            ],
-            "Attempt to move on finished board should throw LogicException" => [
-                [['X', 'X', 'X'], ['O', 'O', ''], $empty_row]
+            "bad format - wrong dimensions" => [
+                ["", "", "", ""], ["", "", ""], [""]
             ]
         ];
     }
+
     /**
+    * Attempt to make a move on improperly formatted board
+    * should throw Exception
+    *
     * @dataProvider invalidBoardsProvider
     */
-    public function testMakeMoveWithInvalidBoard($invalid_board)
+    public function testMakeMoveWithImproperlyFormattedBoard($invalid_board)
     {
         $current_player = 'X';
 
