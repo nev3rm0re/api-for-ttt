@@ -1,3 +1,10 @@
+# Release 1.1.0
+
+This release contains eye-candy to the web client. Added hover effects,
+transitions and colors. Since my artistic abilities are quite modest, I got
+inspiration from [Pure CSS TicTacToe](https://codepen.io/ziga-miklic/pen/Fagmh)
+design (and some of the solutions)
+
 # Release 1.0.1
 
 Removed unused dependencies and externalized bigger ones. Now `tictactoe.js`
