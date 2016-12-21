@@ -1,0 +1,18 @@
+.board {
+    width: 450px;
+    height: 450px;
+}
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    float: left;
+    font-size: 75px;
+}
+
+.fa {
+    margin-left: auto;
+    margin-right: auto;
+}
