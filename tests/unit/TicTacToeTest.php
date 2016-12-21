@@ -59,6 +59,9 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
             ],
             "no player 2" => [
                 [['X', 'X', ''], $empty_row, $empty_row]
+            ],
+            "too little of player 1" => [
+                [['O', 'O', 'O'], ['O', 'X', 'X'], $empty_row]
             ]
         ];
     }
