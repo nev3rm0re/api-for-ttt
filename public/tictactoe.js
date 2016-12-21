@@ -42,9 +42,9 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/*!***********************!*\
-  !*** ./src/index.jsx ***!
-  \***********************/
+/*!*************************!*\
+  !*** ./src/js/index.js ***!
+  \*************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22005,9 +22005,9 @@
 
 /***/ },
 /* 178 */
-/*!*********************!*\
-  !*** ./src/App.jsx ***!
-  \*********************/
+/*!************************!*\
+  !*** ./src/js/App.jsx ***!
+  \************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22021,8 +22021,6 @@
 	var _react = __webpack_require__(/*! react */ 1);
 	
 	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(/*! react-dom */ 32);
 	
 	var _axios = __webpack_require__(/*! axios */ 179);
 	
@@ -23794,4 +23792,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=tictactoe.js.map

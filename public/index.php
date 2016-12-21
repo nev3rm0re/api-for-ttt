@@ -1,73 +1,17 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+// ok, this part might seem weird. Technically, there's no point in assigning
+// $app return of the `require`. Even if I didn't it would still be available
+// along with `$container` and whatever else I declared in `bootstrap.php`
+// I did it for better readability - it is clear now that `$app` will
+// be modified/redeclared after `require`
+$app = require_once __DIR__ . '/bootstrap.php';
 
-$app = new \Slim\App(
-    [
-        'settings' => [
-            'displayErrorDetails' => true
-        ]
-    ]
-);
-$container = $app->getContainer();
-$container['view'] = function($container) {
-    $view = new \Slim\Views\Twig('../templates', [
-        'cache' => false
-    ]);
+$jsonrpc_controller = new \Egoh\Controllers\JsonRpc($container);
+$jsonrpc_controller->attach('/jsonrpc/v1', $app);
 
-    $base_path = rtrim(
-        str_ireplace(
-            'index.php',
-            '',
-            $container['request']->getUri()->getBasePath()),
-        '/'
-    );
-    $view->addExtension(new \Slim\Views\TwigExtension($container['router'], $base_path));
-    return $view;
-};
-
-$app->post(
-    '/jsonrpc/v1/',
-    function ($req, $res) {
-        $game = new \Egoh\TicTacToe();
-        $jsonrpc = json_decode($req->getBody(), true);
-        // let's skip validation for now
-        $board_state = $jsonrpc["params"]["boardState"];
-        $player = $jsonrpc["params"]["player"];
-
-        try {
-            $move = $game->makeMove($board_state, $player);
-            if (empty($move)) {
-                $jsonrpc_error = [
-                    'jsonrpc' => "2.0",
-                    'error' => [],
-                    'id' => $jsonrpc["id"]
-                ];
-
-                return $res->withJson($jsonrpc_error);
-            }
-
-            $jsonrpc_result = [
-                'jsonrpc' => "2.0",
-                'result' => $move,
-                'id' => $jsonrpc["id"]
-            ];
-            return $res->withJson($jsonrpc_result);
-        } catch (\Exception $e) {
-            $jsonrpc_error = [
-                'jsonrpc' => '2.0',
-                'result' => null,
-                'error' => [
-                    'code' => 400,
-                    'message' => "Bad request"
-                ]
-            ];
-            return $res->withJson($jsonrpc_error);
-        }
-    }
-);
-
-$app->get('/client', function($request, $response, $args) {
-    return $this->view->render($response, 'index.twig');
+// This is in case server index is set to index.php and "/" resolves to us
+$app->get('/', function($request, $response, $args) {
+    return $response->withRedirect('/index.html');
 });
 
 $app->run();
