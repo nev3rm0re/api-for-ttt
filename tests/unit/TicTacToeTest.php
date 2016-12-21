@@ -21,7 +21,7 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
                 "expected_move" => [0, 0, 'X']
             ],
             "only move" => [
-                'board' => [$even_full_row, $even_full_row, ['X', 'X', '']],
+                'board' => [$even_full_row, $odd_full_row, ['X', 'O', '']],
                 'player' => 'X',
                 'expected_move' => [2, 2, 'X']
             ],
@@ -62,6 +62,9 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
             ],
             "too little of player 1" => [
                 [['O', 'O', 'O'], ['O', 'X', 'X'], $empty_row]
+            ],
+            "Attempt to move on finished board should throw LogicException" => [
+                [['X', 'X', 'X'], ['O', 'O', ''], $empty_row]
             ]
         ];
     }
