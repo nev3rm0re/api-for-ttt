@@ -8,6 +8,22 @@ $app = new \Slim\App(
         ]
     ]
 );
+$container = $app->getContainer();
+$container['view'] = function($container) {
+    $view = new \Slim\Views\Twig('../templates', [
+        'cache' => false
+    ]);
+
+    $base_path = rtrim(
+        str_ireplace(
+            'index.php',
+            '',
+            $container['request']->getUri()->getBasePath()),
+        '/'
+    );
+    $view->addExtension(new \Slim\Views\TwigExtension($container['router'], $base_path));
+    return $view;
+};
 
 $app->post(
     '/jsonrpc/v1/',
@@ -49,5 +65,9 @@ $app->post(
         }
     }
 );
+
+$app->get('/client', function($request, $response, $args) {
+    return $this->view->render($response, 'index.twig');
+});
 
 $app->run();
