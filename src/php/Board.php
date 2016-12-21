@@ -28,6 +28,20 @@ class Board
         return true;
     }
 
+    public function isValidByRules($flat_board)
+    {
+        $player_1 = count(array_filter($flat_board, function($el) {
+            return ($el == 'X');
+        }));
+
+        $player_2 = count(array_filter($flat_board, function($el) {
+            return ($el == 'O');
+        }));
+        echo "Count of #1", $player_1;
+        echo "Count of #2", $player_2;
+        return (abs($player_1 - $player_2) <= 1);
+    }
+
     protected $flat_board;
     public function fromArray($board_state)
     {
@@ -49,6 +63,10 @@ class Board
         }
 
         $this->flat_board = $flat_board;
+
+        if (!$this->isValidByRules($flat_board)) {
+            throw new \LogicException('Board violates rules');
+        }
     }
 
     public function findAvailableMoves()
