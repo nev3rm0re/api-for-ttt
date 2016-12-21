@@ -5,7 +5,7 @@ const BUILD_DIR = path.resolve(__dirname + '/public');
 const APP_DIR = path.resolve(__dirname + '/src/js');
 
 var config = {
-    entry: APP_DIR + '/index.js',
+    entry: APP_DIR + '/index-offline.js',
 
     output: {
         path: BUILD_DIR,
@@ -24,12 +24,7 @@ var config = {
                 loader: 'babel-loader'
             }
         ]
-    },
-    externals: {
-        'react': 'React',
-        'react-dom': 'ReactDOM'
     }
-
 }
 
 module.exports = config;
