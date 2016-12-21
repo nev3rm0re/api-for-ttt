@@ -47,9 +47,21 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected_move, $move);
     }
 
-    public function testMakeMoveWithInvalidBoard()
+    public function invalidBoardsProvider() {
+        $empty_row = array_fill(0, 3, '');
+        $full_row = array_fill(0, 3, 'X');
+
+        return [
+            "bad format" => [
+                ""
+            ],
+        ];
+    }
+    /**
+    * @dataProvider invalidBoardsProvider
+    */
+    public function testMakeMoveWithInvalidBoard($invalid_board)
     {
-        $invalid_board = '';
         $current_player = 'X';
 
         $testee = new \Egoh\TicTacToe();
