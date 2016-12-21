@@ -37,13 +37,8 @@ $app->post(
         try {
             $move = $game->makeMove($board_state, $player);
             if (empty($move)) {
-                $jsonrpc_error = [
-                    'jsonrpc' => "2.0",
-                    'error' => [],
-                    'id' => $jsonrpc["id"]
-                ];
-
-                return $res->withJson($jsonrpc_error);
+                $jsonrpc_error = new \Egoh\JsonRpcError($jsonrpc['id']);
+                return $res->withJson($jsonrpc_error->toJson());
             }
 
             $jsonrpc_result = [
@@ -53,15 +48,8 @@ $app->post(
             ];
             return $res->withJson($jsonrpc_result);
         } catch (\Exception $e) {
-            $jsonrpc_error = [
-                'jsonrpc' => '2.0',
-                'result' => null,
-                'error' => [
-                    'code' => 400,
-                    'message' => "Bad request"
-                ]
-            ];
-            return $res->withJson($jsonrpc_error);
+            $jsonrpc_error = new \Egoh\JsonRpcError($jsonrpc['id'], ['code' => 400, 'message' => 'Bad request']);
+            return $res->withJson($jsonrpc_error->toJson());
         }
     }
 );
