@@ -1,7 +1,7 @@
 {
     "autoload": {
         "psr-4": {
-            "Egoh\\": "src/"
+            "Egoh\\": "src/php/"
         }
     },
     "require-dev": {
