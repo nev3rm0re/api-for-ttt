@@ -53,10 +53,11 @@ class Board
 
     public function findAvailableMoves()
     {
-        $callback = function ($value, $key) {
+        $callback = function ($value) {
             return ($value == '_');
         };
-        $keys = array_filter($this->flat_board, $callback, ARRAY_FILTER_USE_BOTH);
+
+        $keys = array_filter($this->flat_board, $callback);
         $moves = [];
         foreach (array_keys($keys) as $index) {
             $moves[] = [floor($index / $this->size), $index % $this->size];
