@@ -2,7 +2,7 @@
 // ok, this part might seem weird. Technically, there's no point in assigning
 // $app return of the `require`. Even if I didn't it would still be available
 // along with `$container` and whatever else I declared in `bootstrap.php`
-// ThI did it is for better readability - now it's' obvious, that `$app` will
+// I did it for better readability - now it's' obvious, that `$app` will
 // be modified/redeclared after `require`
 $app = require_once __DIR__ . '/bootstrap.php';
 
