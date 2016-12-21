@@ -5,21 +5,49 @@ const PLAYER1 = 'X';
 const PLAYER2 = 'O';
 const EMPTY_CELL = '_';
 
-function Square(props) {
-    let playerClassName;
-
-    if (props.player == PLAYER1) {
-        playerClassName = "fa fa-close";
-    } else if (props.player == PLAYER2) {
-        playerClassName = "fa fa-circle-o";
-    } else {
-        playerClassName = "fa";
+class Square extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {'isHovered': false}
+        this.onHover = this.onHover.bind(this);
     }
-    return (
-        <button className="square" onClick={() => props.onClick()}>
-            <i className={playerClassName}></i>
-        </button>
-    );
+
+    onHover(e) {
+        this.setState({'isHovered': (e.type == "mouseenter")});
+    }
+
+    render() {
+        let map = {}
+        map[PLAYER1] = "fa fa-close";
+        map[PLAYER2] = "fa fa-circle-o";
+        map[EMPTY_CELL] = "fa";
+
+        let props = this.props;
+        let playerIconClassName, playerClassName = "";
+
+        playerIconClassName = map[props.player];
+
+        if (props.player == PLAYER1) {
+            playerClassName = 'player-x';
+        } else if (props.player == PLAYER2) {
+            playerClassName = 'player-o';
+        } else {
+            if (this.state.isHovered) {
+                playerIconClassName = map[props.game.currentPlayer];
+            } else {
+                playerIconClassName = "fa";
+            }
+        }
+        return (
+            <button className={"square " + playerClassName}
+                onClick={() => props.onClick()}
+                onMouseEnter={this.onHover}
+                onMouseLeave={this.onHover}
+                >
+                <i className={playerIconClassName}></i>
+            </button>
+        );
+    }
 }
 
 class Board extends React.Component {
@@ -27,27 +55,46 @@ class Board extends React.Component {
     {
         super(props);
     }
-    renderSquare(i) {
+
+    renderSquare(i, player=null) {
         var className;
+
+        if (player === null) {
+            player = this.props.cells[i];
+        }
+
+        switch (player) {
+            case PLAYER1:
+                className = 'fa fa-close';
+                break;
+            case PLAYER2:
+                className = 'fa fa-circle-o';
+                break;
+            default:
+                className = 'fa';
+                break;
+        }
+
         if (this.props.cells[i] == 'X') {
             className = 'fa fa-close';
         } else if (this.props.cells[i] == 'O') {
             className = 'fa fa-circle-o';
         } else {
-            className = 'fa ';
+            className = "fa";
         }
 
         return (
             <Square className={className}
                 player={this.props.cells[i]}
-                onClick={() => this.props.onClick(i)} />
+                game={this.props.game}
+                onClick={() => this.props.onClick(i)}
+                onMouseEnter={(i) => this.handleHover(i)} />
         );
     }
 
     render() {
         return (
             <div>
-
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
@@ -122,10 +169,11 @@ class Game extends React.Component {
     }
 
     render() {
-        let status;
-        status = "Next player: " + (this.state.currentPlayer);
+        let playerClassName = (this.state.currentPlayer == PLAYER1 ? "player-x": "player-o");
+
+        let status = "Next player: " + (this.state.currentPlayer);
         return (
-            <div className="game row">
+            <div className={"game row " + playerClassName}>
                 <div className="col-md-6">
                     <div className="board">
                         <Board cells={this.state.cells} game={this.state} onClick={(i) => this.handleClick(i)}/>
