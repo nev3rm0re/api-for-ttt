@@ -1,0 +1,22 @@
+{
+  "name": "api-for-ttt",
+  "homepage": "https://github.com/nev3rm0re/api-for-ttt",
+  "authors": [
+    "German Rumjantsev <german.rumm@gmail.com>"
+  ],
+  "description": "Tic Tac Toe bot with an API and a client",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "knockout": "^3.4.1"
+  }
+}
