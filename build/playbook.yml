@@ -8,3 +8,4 @@
     composer:
       command: install
       working_dir: /vagrant
+      no-dev: no
