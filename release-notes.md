@@ -1,3 +1,11 @@
+# Release 0.2.0
+
+This release adds web client to an API available at http://localhost:8000/client.
+
+Client allows player to make moves and ask for a move from the API.
+
+Next release - code cleanup and documentation.
+
 # Release 0.1.0
 
 This release contains pretty dumb bot wrapped in JSON-RPC API.
