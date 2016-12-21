@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "Tictactoe",
-		"_postman_id": "55583e16-806b-6905-3e79-f37b06862b04",
+		"_postman_id": "874673a8-b714-a6f7-1b60-1052ae5bb5c1",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -60,7 +60,7 @@
 				}
 			],
 			"request": {
-				"url": "http://localhost:8080/index.php/jsonrpc/v1/",
+				"url": "{{URL}}/index.php/jsonrpc/v1/",
 				"method": "POST",
 				"header": [
 					{
@@ -106,7 +106,7 @@
 				}
 			],
 			"request": {
-				"url": "http://localhost:8080/index.php/jsonrpc/v1/",
+				"url": "{{URL}}/index.php/jsonrpc/v1/",
 				"method": "POST",
 				"header": [
 					{

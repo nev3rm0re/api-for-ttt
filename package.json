@@ -12,9 +12,12 @@
     "webpack-dev-server": "^1.16.2"
   },
   "devDependencies": {
+    "newman": "^3.3.1",
     "webpack": "^1.14.0"
   },
   "scripts": {
-    "start": "webpack-dev-server --hot"
+    "start": "webpack-dev-server --hot",
+    "test:newman:dev": "newman run tests/integration/Tictactoe.postman_collection.json -e build/test/develop.postman_environment.json --no-color",
+    "test:newman:release": "newman run tests/integration/Tictactoe.postman_collection.json -e build/test/release.postman_environment.json --no-color"
   }
 }
