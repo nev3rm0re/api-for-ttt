@@ -3,6 +3,8 @@ namespace Egoh;
 
 class Board
 {
+    protected $last_error;
+
     protected $size;
     public function __construct($size = 3)
     {
@@ -30,6 +32,7 @@ class Board
 
     public function isValidByRules($flat_board)
     {
+        // Rule 1: Both players must have roughly same number of tokens on the board
         $player_1 = count(array_filter($flat_board, function($el) {
             return ($el == 'X');
         }));
@@ -37,7 +40,29 @@ class Board
         $player_2 = count(array_filter($flat_board, function($el) {
             return ($el == 'O');
         }));
-        return (abs($player_1 - $player_2) <= 1);
+
+        if (abs($player_1 - $player_2) > 1) {
+            return false;
+        }
+
+        // if ($this->isBoardFinished($flat_board)) {
+            $output = array_map(function($el) {
+                return $el == 'X' ? '1' : '0';
+            }, $flat_board);
+            $state = bindec(implode('', $output));
+
+            $patterns = [
+                7 * pow(2, 6)
+            ];
+
+            foreach ($patterns as $pattern) {
+                if (($state & $pattern) == $pattern) {
+                    $this->last_error = 'WIN match: ' . $pattern . ' - ' . decbin($pattern) . "; state: $state - " . decbin($state);
+                    return false;
+                }
+            }
+        // }
+        return true;
     }
 
     protected $flat_board;
@@ -63,7 +88,7 @@ class Board
         $this->flat_board = $flat_board;
 
         if (!$this->isValidByRules($flat_board)) {
-            throw new \LogicException('Board violates rules');
+            throw new \LogicException('Board violates rules: ' . $this->last_error);
         }
     }
 
