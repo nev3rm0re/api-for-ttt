@@ -6,6 +6,8 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
     {
         $empty_row = array_fill(0, 3, '');
         $full_row = array_fill(0, 3, 'X');
+        $odd_full_row = ['X', 'O', 'X'];
+        $even_full_row = ['O', 'X', 'O'];
 
         $empty_board = array_fill(0, 3, $empty_row);
 
@@ -19,17 +21,17 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
                 "expected_move" => [0, 0, 'X']
             ],
             "only move" => [
-                'board' => $full_board,
+                'board' => [$even_full_row, $even_full_row, ['X', 'X', '']],
                 'player' => 'X',
                 'expected_move' => [2, 2, 'X']
             ],
             "half full board" => [
-                'board' => [$full_row, $empty_row, $empty_row],
+                'board' => [$odd_full_row, $empty_row, $empty_row],
                 'player' => 'O',
                 'expected_move' => [1, 0, 'O']
             ],
             "full board" => [
-                'board' => [$full_row, $full_row, $full_row],
+                'board' => [$odd_full_row, $even_full_row, $odd_full_row],
                 'player' => 'O',
                 'expected_move' => []
             ]

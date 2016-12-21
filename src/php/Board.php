@@ -37,8 +37,6 @@ class Board
         $player_2 = count(array_filter($flat_board, function($el) {
             return ($el == 'O');
         }));
-        echo "Count of #1", $player_1;
-        echo "Count of #2", $player_2;
         return (abs($player_1 - $player_2) <= 1);
     }
 
