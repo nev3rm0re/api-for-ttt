@@ -1,3 +1,17 @@
+# Release 1.0.1
+
+Removed unused dependencies and externalized bigger ones. Now `tictactoe.js`
+is 58K compared to 800+K before. Web-client now requires client to have an
+internet connection.
+
+Original behaviour is now called "offline" build and can be built using
+npm:
+
+```bash
+$ yarn run webpack:build:offline
+```
+This will pack `react` and `react-dom` dependencies into `tictactoe.js` bundle.
+
 # Release 1.0.0
 Cleaned up code, make client-side completely client-side.
 Verified that API works using PHP's built-in server.
