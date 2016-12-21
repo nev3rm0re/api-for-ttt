@@ -1,5 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
+import axios from 'axios';
 
 const PLAYER1 = 'X';
 const PLAYER2 = 'O';
@@ -45,11 +46,9 @@ class Board extends React.Component {
     }
 
     render() {
-        let status;
-        status = "Next player: " + (this.props.game.currentPlayer);
         return (
             <div>
-                <div className="status">{status}</div>
+
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
@@ -80,6 +79,27 @@ class Game extends React.Component {
         };
     }
 
+    makeMove() {
+        const cells = this.state.cells;
+
+        let payload = {
+            "jsonrpc": "2.0",
+            "id": "whatever",
+            "method": "makeMove",
+            "params": {
+                "boardState": [
+                    cells.slice(0, 3),
+                    cells.slice(3, 6),
+                    cells.slice(6, 9)
+                ],
+                "player": this.state.currentPlayer
+            }
+        };
+        axios.post("/jsonrpc/v1/", payload).then((response) => {
+            this.move(response.data.result[0], response.data.result[1]);
+        });
+    }
+
     move(x, y) {
         const cells = this.state.cells.slice();
         cells[x * 3 + y] = this.state.currentPlayer;
@@ -103,16 +123,18 @@ class Game extends React.Component {
     }
 
     render() {
+        let status;
+        status = "Next player: " + (this.state.currentPlayer);
         return (
             <div className="game row">
-                <div className=" col-md-6">
+                <div className="col-md-6">
                     <div className="board">
                         <Board cells={this.state.cells} game={this.state} onClick={(i) => this.handleClick(i)}/>
                     </div>
                 </div>
                 <div className="game-info col-md-6">
-                    <div>{/* status */}</div>
-                    <div>{/* TODO */}</div>
+                    <div className="status">{status}</div>
+                    <button onClick={() => this.makeMove()}>Bot move</button>
                 </div>
             </div>
         );
