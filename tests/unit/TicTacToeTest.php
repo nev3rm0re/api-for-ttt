@@ -55,6 +55,9 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
             "bad format" => [
                 ""
             ],
+            "no player 2" => [
+                [['X', 'X', ''], $empty_row, $empty_row]
+            ]
         ];
     }
     /**
