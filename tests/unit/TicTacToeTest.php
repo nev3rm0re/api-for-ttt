@@ -81,14 +81,26 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
     public function winningBoardProvider()
     {
         return [
-            "Pick winning one out of two available" => [
+            "Pick winning one out of only two available" => [
                 'board' => [
                     ['X', 'O', 'X'],
                     ['O', 'X', 'O'],
                     ['O', '',  '']
                 ],
                 'player' => 'X',
-                'expectedMove' => [2, 2, 'X']
+                'expectedMoves' => [[2, 2, 'X']]
+            ],
+            "Pick winning one out of three available" => [
+                'board' => [
+                    ['X', 'O', ''],
+                    ['X',  '', 'X'],
+                    [ '',  'O', 'O']
+                ],
+                'player' => 'X',
+                'expectedMoves' => [
+                    [1, 1, 'X'],
+                    [2, 0, 'X'],
+                ]
             ]
         ];
     }
@@ -101,6 +113,10 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
         $testee = new \Egoh\TicTacToe();
         $move = $testee->makeMove($winning_board, $player);
 
-        $this->assertEquals($expected, $move);
+        $this->assertContains(
+            $move,
+            $expected,
+            "Calculated move is one of expected ones."
+        );
     }
 }
