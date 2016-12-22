@@ -77,4 +77,30 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
         $this->expectException(\Exception::class);
         $testee->makeMove($invalid_board, $current_player);
     }
+
+    public function winningBoardProvider()
+    {
+        return [
+            "Pick winning one out of two available" => [
+                'board' => [
+                    ['X', 'O', 'X'],
+                    ['O', 'X', 'O'],
+                    ['O', '',  '']
+                ],
+                'player' => 'X',
+                'expectedMove' => [2, 2, 'X']
+            ]
+        ];
+    }
+    /**
+    * Bot should pick winning move
+    * @dataProvider winningBoardProvider
+    */
+    public function testBotPicksWinningMove($winning_board, $player, $expected)
+    {
+        $testee = new \Egoh\TicTacToe();
+        $move = $testee->makeMove($winning_board, $player);
+
+        $this->assertEquals($expected, $move);
+    }
 }
