@@ -10,7 +10,7 @@ class TicTacToe implements MoveInterface
 
         $moves = $board->findAvailableMoves();
 
-        if (empty($moves)) {
+        if (empty($moves) || !$board->isValidByRules()) {
             return [];
         }
 
