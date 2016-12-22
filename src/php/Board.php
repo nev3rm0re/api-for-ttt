@@ -68,6 +68,10 @@ class Board
         return true;
     }
 
+    public function isWinFor($player) {
+        return $this->isWin($this->flat_board, $player);
+    }
+
     public function isWin($flat_board, $player = null) {
         if ($player === null) {
             return

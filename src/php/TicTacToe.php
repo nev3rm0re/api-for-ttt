@@ -3,6 +3,8 @@ namespace Egoh;
 
 class TicTacToe implements MoveInterface
 {
+    protected $board;
+
     public function makeMove($boardState, $playerUnit = 'X')
     {
         // This is a switch to be used during development
@@ -17,6 +19,8 @@ class TicTacToe implements MoveInterface
         if (empty($moves) || !$board->isValidByRules()) {
             return [];
         }
+
+        $this->board = $board;
 
         if ($use_latest) {
             return $this->pickMoveV2($moves, $playerUnit);
@@ -44,6 +48,17 @@ class TicTacToe implements MoveInterface
     */
     public function pickMoveV2($moves, $playerUnit)
     {
+        foreach ($moves as $move) {
+            $board_state = $this->board->toArray();
+            $board_state[$move[0]][$move[1]] = $playerUnit;
+
+            $board = new Board(3);
+            $board->fromArray($board_state);
+            if ($board->isWinFor($playerUnit)) {
+                return array_merge($move, [$playerUnit]);
+            }
+        }
+        // if all else fails - resort to our dumb counterpart
         return $this->pickMove($moves, $playerUnit);
     }
 }
