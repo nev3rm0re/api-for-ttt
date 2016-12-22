@@ -121,7 +121,7 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
     */
     public function testBotPicksWinningMove($winning_board, $player, $expected)
     {
-        $testee = new \Egoh\TicTacToe();
+        $testee = new \Egoh\TicTacToe(new \Egoh\SmartBrain());
         $move = $testee->makeMove($winning_board, $player);
 
         $this->assertContains(

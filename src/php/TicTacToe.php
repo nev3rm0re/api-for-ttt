@@ -5,12 +5,18 @@ class TicTacToe implements MoveInterface
 {
     protected $brain;
 
+    public function __construct($brain = null)
+    {
+        if (is_null($brain)) {
+            $brain = new DumbBrain();
+        }
+
+        $this->brain = $brain;
+    }
+
     protected $board;
     public function makeMove($boardState, $playerUnit = 'X')
     {
-        // This is a switch to be used during development
-        // this will use `pickMoveV2` logic by default
-        $use_latest = true;
 
         $board = new Board(3);
         $board->fromArray($boardState);
@@ -21,14 +27,8 @@ class TicTacToe implements MoveInterface
             return [];
         }
 
-        $this->board = $board;
-
-        if ($use_latest) {
-            $this->brain->setBoard($board);
-            return $this->brain->pickMove($moves, $playerUnit);
-        }
-
-        return $this->pickMove($moves, $playerUnit);
+        $this->brain->setBoard($board);
+        return $this->brain->pickMove($moves, $playerUnit);
     }
 
     /**
