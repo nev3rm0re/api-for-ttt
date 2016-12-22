@@ -23,10 +23,6 @@ class JsonRpc
 
                 try {
                     $move = $game->makeMove($board_state, $player);
-                    if (empty($move)) {
-                        $jsonrpc_error = new \Egoh\JsonRpcError($jsonrpc['id']);
-                        return $res->withJson($jsonrpc_error->toJson());
-                    }
 
                     $jsonrpc_result = [
                         'jsonrpc' => "2.0",

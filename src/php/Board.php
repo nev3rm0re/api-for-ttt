@@ -3,6 +3,11 @@ namespace Egoh;
 
 class Board
 {
+    protected $last_error;
+    public function getLastError() {
+        return $this->last_error;
+    }
+
     protected $size;
     public function __construct($size = 3)
     {
@@ -26,6 +31,83 @@ class Board
         }
 
         return true;
+    }
+
+    public function validateBoard()
+    {
+        if (!$this->isValidByRules()) {
+            throw new \LogicException(
+                "Board is invalid by rules: " . $this->getLastError()
+            );
+        }
+    }
+
+    public function isValidByRules()
+    {
+        $flat_board = $this->flat_board;
+
+        // Rule 1: Both players must have roughly same number of tokens on the board
+        $player_1 = count(array_filter($flat_board, function($el) {
+            return ($el == 'X');
+        }));
+
+        $player_2 = count(array_filter($flat_board, function($el) {
+            return ($el == 'O');
+        }));
+
+        if (abs($player_1 - $player_2) > 1) {
+            $this->last_error = 'Wrong counts: ' . $player_1 . '/' . $player_2;
+            return false;
+        }
+
+        if ($this->isWin($flat_board)) {
+            // $this->last_error = 'Win condition';
+            return false;
+        }
+        return true;
+    }
+
+    public function isWin($flat_board, $player = null) {
+        if ($player === null) {
+            return
+                $this->isWin($flat_board, 'X')
+                || $this->isWin($flat_board, 'O');
+        }
+
+        // if ($this->isBoardFinished($flat_board)) {
+        $output = array_map(function($el) use ($player) {
+            return $el == $player ? '1' : '0';
+        }, $flat_board);
+        $state = bindec(implode('', $output));
+
+        $patterns = [
+            /* horizontals */
+            7 * pow(2, 6),
+            7 * pow(2, 3),
+            7 * 1,
+            /* verticals */
+            bindec('100100100'),
+            bindec('010010010'),
+            bindec('001001001'),
+            bindec(
+                '100'.
+                '010'.
+                '001'
+                ),
+            bindec(
+                '001'.
+                '010'.
+                '100'
+            )
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (($state & $pattern) == $pattern) {
+                $this->last_error = 'WIN match: ' . $pattern . ' - ' . decbin($pattern) . "; state: $state - " . decbin($state);
+                return true;
+            }
+        }
+        return false;
     }
 
     protected $flat_board;
@@ -53,12 +135,18 @@ class Board
 
     public function findAvailableMoves()
     {
+        $moves = [];
+
+        // if (!$this->isValidByRules()) {
+        //     // If board is not valid by rules - no moves are available
+        //     return $moves;
+        // }
+
         $callback = function ($value) {
             return ($value == '_');
         };
 
         $keys = array_filter($this->flat_board, $callback);
-        $moves = [];
         foreach (array_keys($keys) as $index) {
             $moves[] = [floor($index / $this->size), $index % $this->size];
         }
