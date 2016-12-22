@@ -134,6 +134,25 @@ class Board
         $this->flat_board = $flat_board;
     }
 
+    public function toArray()
+    {
+        // normalize flat board
+        $normalized_flat_board = array_map(
+            function($el) {
+                return ($el == '_') ? '' : $el;
+            },
+            $this->flat_board
+        );
+
+        return [
+            // don't you hate it when PHP syntax is diffent from normal one
+            // third param here is $length, not the end index like in JS
+            array_slice($normalized_flat_board, 0, 3),
+            array_slice($normalized_flat_board, 3, 3),
+            array_slice($normalized_flat_board, 6, 3)
+        ];
+    }
+
     public function findAvailableMoves()
     {
         $moves = [];
