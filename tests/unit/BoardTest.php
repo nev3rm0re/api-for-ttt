@@ -69,6 +69,5 @@ class BoardTest extends \PHPUnit_Framework_TestCase
         $board->fromArray($invalid_board);
 
         $this->assertFalse($board->isValidByRules());
-        echo $board->getLastError();
     }
 }
