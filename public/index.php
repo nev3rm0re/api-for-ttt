@@ -6,8 +6,13 @@
 // be modified/redeclared after `require`
 $app = require_once __DIR__ . '/bootstrap.php';
 
-$jsonrpc_controller = new \Egoh\Controllers\JsonRpc($container);
-$jsonrpc_controller->attach('/jsonrpc/v1', $app);
+$jsonrpc_controller_v1 = new \Egoh\Controllers\JsonRpc($container);
+$jsonrpc_controller_v1->configureVersion1();
+$jsonrpc_controller_v1->attach('/jsonrpc/v1', $app);
+
+$jsonrpc_controller_v2 = new \Egoh\Controllers\JsonRpc($container);
+$jsonrpc_controller_v2->configureVersion2();
+$jsonrpc_controller_v2->attach('/jsonrpc/v2', $app);
 
 // This is in case server index is set to index.php and "/" resolves to us
 $app->get('/', function($request, $response, $args) {

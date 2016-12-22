@@ -77,4 +77,57 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
         $this->expectException(\Exception::class);
         $testee->makeMove($invalid_board, $current_player);
     }
+
+    public function winningBoardProvider()
+    {
+        return [
+            "Pick winning one out of only two available" => [
+                'board' => [
+                    ['X', 'O', 'X'],
+                    ['O', 'X', 'O'],
+                    ['O', '',  '']
+                ],
+                'player' => 'X',
+                'expectedMoves' => [[2, 2, 'X']]
+            ],
+            "Pick winning one out of three available" => [
+                'board' => [
+                    ['X', 'O', ''],
+                    ['X',  '', 'X'],
+                    [ '',  'O', 'O']
+                ],
+                'player' => 'X',
+                'expectedMoves' => [
+                    [1, 1, 'X'],
+                    [2, 0, 'X'],
+                ]
+            ],
+            "Prevent opposing player from winning" => [
+                'board' => [
+                    ['X', 'O', ''],
+                    ['X',  '', ''],
+                    [ '',  '', '']
+                ],
+                'player' => 'O',
+                'expectedMoves' => [
+                    [2, 0, 'O']
+                ]
+            ]
+        ];
+    }
+    /**
+    * Bot should pick winning move
+    * @dataProvider winningBoardProvider
+    */
+    public function testBotPicksWinningMove($winning_board, $player, $expected)
+    {
+        $testee = new \Egoh\TicTacToe(new \Egoh\SmartBrain());
+        $move = $testee->makeMove($winning_board, $player);
+
+        $this->assertContains(
+            $move,
+            $expected,
+            "Calculated move is one of expected ones."
+        );
+    }
 }

@@ -8,189 +8,386 @@
 	},
 	"item": [
 		{
-			"name": "Make a move on an empty board",
-			"event": [
+			"name": "JSON-RPC/v1",
+			"description": "",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
-							"var jsonrpc_schema = {",
-							"    \"type\": \"object\",",
-							"    \"properties\": {",
-							"        \"jsonrpc\": \"string\",",
-							"        \"result\": \"string\",",
-							"        \"id\": \"string\"",
-							"    },",
-							"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
-							"}",
-							"var move_schema = {",
-							"    \"$schema\": \"http://json-schema.org/draft-04/schema\",",
-							"    \"type\": \"array\",",
-							"    \"items\": [",
-							"        {",
-							"            \"type\": \"number\",",
-							"            \"minimum\": 0,",
-							"            \"maximum\": 2",
-							"        },",
-							"        {",
-							"            \"type\": \"number\",",
-							"            \"minimum\": 0,",
-							"            \"maximum\": 2",
-							"        },",
-							"        {",
-							"            \"type\": \"string\",",
-							"            \"enum\": [\"O\", \"X\"]",
-							"        }",
-							"  ]",
-							"};",
-							"",
-							"var response = JSON.parse(responseBody);",
-							"// Make sure we are following JSON-RPC standard",
-							"tests[\"Response looks like jsonrpc\"] = tv4.validate(response, jsonrpc_schema);",
-							"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"001\");",
-							"",
-							"tests[\"Result looks like a move\"] = tv4.validate(response.result, move_schema);",
-							"",
-							"// Some business-logic tests",
-							"tests[\"Move is for the player token provided\"] = (response.result[2] === 'X');"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{URL}}/index.php/jsonrpc/v1/",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
+					"name": "Make a move on an empty board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
+									"var jsonrpc_schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"jsonrpc\": \"string\",",
+									"        \"result\": \"string\",",
+									"        \"id\": \"string\"",
+									"    },",
+									"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
+									"}",
+									"var move_schema = {",
+									"    \"$schema\": \"http://json-schema.org/draft-04/schema\",",
+									"    \"type\": \"array\",",
+									"    \"items\": [",
+									"        {",
+									"            \"type\": \"number\",",
+									"            \"minimum\": 0,",
+									"            \"maximum\": 2",
+									"        },",
+									"        {",
+									"            \"type\": \"number\",",
+									"            \"minimum\": 0,",
+									"            \"maximum\": 2",
+									"        },",
+									"        {",
+									"            \"type\": \"string\",",
+									"            \"enum\": [\"O\", \"X\"]",
+									"        }",
+									"  ]",
+									"};",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"// Make sure we are following JSON-RPC standard",
+									"tests[\"Response looks like jsonrpc\"] = tv4.validate(response, jsonrpc_schema);",
+									"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"001\");",
+									"",
+									"tests[\"Result looks like a move\"] = tv4.validate(response.result, move_schema);",
+									"",
+									"// Some business-logic tests",
+									"tests[\"Move is for the player token provided\"] = (response.result[2] === 'X');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/index.php/jsonrpc/v1/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"\", \"\", \"\"], \n\t\t  \t[\"\", \"\", \"\"], \n\t\t  \t[\"\", \"\", \"\"]\n\t\t],\n\t\t\"player\": \"X\"\n\t},\n\t\"id\": \"001\"\n}"
+						},
 						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"\", \"\", \"\"], \n\t\t  \t[\"\", \"\", \"\"], \n\t\t  \t[\"\", \"\", \"\"]\n\t\t],\n\t\t\"player\": \"X\"\n\t},\n\t\"id\": \"001\"\n}"
+					},
+					"response": []
 				},
-				"description": ""
-			},
-			"response": []
+				{
+					"name": "Make a move on a full board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
+									"var jsonrpc_result_schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"jsonrpc\": \"string\",",
+									"        \"result\": \"string\",",
+									"        \"error\": \"any\",",
+									"        \"id\": \"string\"",
+									"    },",
+									"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
+									"}",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"// Make sure we are following JSON-RPC standard",
+									"tests[\"Response looks like jsonrpc result\"] = tv4.validate(response, jsonrpc_result_schema);",
+									"tests[\"Result should be an empty array indicating no moves\"] = (response.result.length === 0);",
+									"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"002\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/index.php/jsonrpc/v1/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"X\", \"X\", \"X\"], \n\t\t  \t[\"X\", \"X\", \"X\"], \n\t\t  \t[\"X\", \"X\", \"X\"]\n\t\t],\n\t\t\"player\": \"O\"\n\t},\n\t\"id\": \"002\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Make a move on a finished board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
+									"var jsonrpc_schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"jsonrpc\": \"string\",",
+									"        \"result\": \"string\",",
+									"        \"id\": \"string\"",
+									"    },",
+									"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
+									"}",
+									"var move_schema = {",
+									"    \"$schema\": \"http://json-schema.org/draft-04/schema\",",
+									"    \"type\": \"array\",",
+									"    \"items\": [",
+									"        {",
+									"            \"type\": \"number\",",
+									"            \"minimum\": 0,",
+									"            \"maximum\": 2",
+									"        },",
+									"        {",
+									"            \"type\": \"number\",",
+									"            \"minimum\": 0,",
+									"            \"maximum\": 2",
+									"        },",
+									"        {",
+									"            \"type\": \"string\",",
+									"            \"enum\": [\"O\", \"X\"]",
+									"        }",
+									"  ]",
+									"};",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"// Make sure we are following JSON-RPC standard",
+									"tests[\"Response looks like jsonrpc\"] = tv4.validate(response, jsonrpc_schema);",
+									"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"003\");",
+									"",
+									"tests[\"Result looks like a move\"] = tv4.validate(response.result, move_schema);",
+									"tests[\"Result should be an empty array indicating no moves\"] = (response.result.length === 0);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/index.php/jsonrpc/v1/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"X\", \"O\", \"\"], \n\t\t  \t[\"X\", \"O\", \"\"], \n\t\t  \t[\"X\", \"\", \"\"]\n\t\t],\n\t\t\"player\": \"O\"\n\t},\n\t\"id\": \"003\"\n}"
+						},
+						"description": "When asked to make a move on a board that is already in \"finished\" state, API should return an empty array, indicating that no moves are available."
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "Make a move on a full board",
-			"event": [
+			"name": "JSON-RPC/v2",
+			"description": "",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
-							"var jsonrpc_result_schema = {",
-							"    \"type\": \"object\",",
-							"    \"properties\": {",
-							"        \"jsonrpc\": \"string\",",
-							"        \"result\": \"string\",",
-							"        \"error\": \"any\",",
-							"        \"id\": \"string\"",
-							"    },",
-							"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
-							"}",
-							"",
-							"var response = JSON.parse(responseBody);",
-							"// Make sure we are following JSON-RPC standard",
-							"tests[\"Response looks like jsonrpc result\"] = tv4.validate(response, jsonrpc_result_schema);",
-							"tests[\"Result should be an empty array indicating no moves\"] = (response.result.length === 0);",
-							"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"002\");"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{URL}}/index.php/jsonrpc/v1/",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
+					"name": "Make a move on an empty board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
+									"var jsonrpc_schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"jsonrpc\": \"string\",",
+									"        \"result\": \"string\",",
+									"        \"id\": \"string\"",
+									"    },",
+									"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
+									"}",
+									"var move_schema = {",
+									"    \"$schema\": \"http://json-schema.org/draft-04/schema\",",
+									"    \"type\": \"array\",",
+									"    \"items\": [",
+									"        {",
+									"            \"type\": \"number\",",
+									"            \"minimum\": 0,",
+									"            \"maximum\": 2",
+									"        },",
+									"        {",
+									"            \"type\": \"number\",",
+									"            \"minimum\": 0,",
+									"            \"maximum\": 2",
+									"        },",
+									"        {",
+									"            \"type\": \"string\",",
+									"            \"enum\": [\"O\", \"X\"]",
+									"        }",
+									"  ]",
+									"};",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"// Make sure we are following JSON-RPC standard",
+									"tests[\"Response looks like jsonrpc\"] = tv4.validate(response, jsonrpc_schema);",
+									"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"001\");",
+									"",
+									"tests[\"Result looks like a move\"] = tv4.validate(response.result, move_schema);",
+									"",
+									"// Some business-logic tests",
+									"tests[\"Move is for the player token provided\"] = (response.result[2] === 'X');"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/index.php/jsonrpc/v2/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"\", \"\", \"\"], \n\t\t  \t[\"\", \"\", \"\"], \n\t\t  \t[\"\", \"\", \"\"]\n\t\t],\n\t\t\"player\": \"X\"\n\t},\n\t\"id\": \"001\"\n}"
+						},
 						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"X\", \"X\", \"X\"], \n\t\t  \t[\"X\", \"X\", \"X\"], \n\t\t  \t[\"X\", \"X\", \"X\"]\n\t\t],\n\t\t\"player\": \"O\"\n\t},\n\t\"id\": \"002\"\n}"
+					},
+					"response": []
 				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Make a move on a finished board",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
-							"var jsonrpc_schema = {",
-							"    \"type\": \"object\",",
-							"    \"properties\": {",
-							"        \"jsonrpc\": \"string\",",
-							"        \"result\": \"string\",",
-							"        \"id\": \"string\"",
-							"    },",
-							"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
-							"}",
-							"var move_schema = {",
-							"    \"$schema\": \"http://json-schema.org/draft-04/schema\",",
-							"    \"type\": \"array\",",
-							"    \"items\": [",
-							"        {",
-							"            \"type\": \"number\",",
-							"            \"minimum\": 0,",
-							"            \"maximum\": 2",
-							"        },",
-							"        {",
-							"            \"type\": \"number\",",
-							"            \"minimum\": 0,",
-							"            \"maximum\": 2",
-							"        },",
-							"        {",
-							"            \"type\": \"string\",",
-							"            \"enum\": [\"O\", \"X\"]",
-							"        }",
-							"  ]",
-							"};",
-							"",
-							"var response = JSON.parse(responseBody);",
-							"// Make sure we are following JSON-RPC standard",
-							"tests[\"Response looks like jsonrpc\"] = tv4.validate(response, jsonrpc_schema);",
-							"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"003\");",
-							"",
-							"tests[\"Result looks like a move\"] = tv4.validate(response.result, move_schema);",
-							"tests[\"Result should be an empty array indicating no moves\"] = (response.result.length === 0);"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{URL}}/index.php/jsonrpc/v1/",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
+					"name": "Make a move on a full board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
+									"var jsonrpc_result_schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"jsonrpc\": \"string\",",
+									"        \"result\": \"string\",",
+									"        \"error\": \"any\",",
+									"        \"id\": \"string\"",
+									"    },",
+									"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
+									"}",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"// Make sure we are following JSON-RPC standard",
+									"tests[\"Response looks like jsonrpc result\"] = tv4.validate(response, jsonrpc_result_schema);",
+									"tests[\"Result should be an empty array indicating no moves\"] = (response.result.length === 0);",
+									"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"002\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/index.php/jsonrpc/v2/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"X\", \"X\", \"X\"], \n\t\t  \t[\"X\", \"X\", \"X\"], \n\t\t  \t[\"X\", \"X\", \"X\"]\n\t\t],\n\t\t\"player\": \"O\"\n\t},\n\t\"id\": \"002\"\n}"
+						},
 						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"X\", \"O\", \"\"], \n\t\t  \t[\"X\", \"O\", \"\"], \n\t\t  \t[\"X\", \"\", \"\"]\n\t\t],\n\t\t\"player\": \"O\"\n\t},\n\t\"id\": \"003\"\n}"
+					},
+					"response": []
 				},
-				"description": "When asked to make a move on a board that is already in \"finished\" state, API should return an empty array, indicating that no moves are available."
-			},
-			"response": []
+				{
+					"name": "Make a move on a finished board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Content-Type is json\"] = postman.getResponseHeader(\"Content-Type\").startsWith('application/json');",
+									"var jsonrpc_schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"jsonrpc\": \"string\",",
+									"        \"result\": \"string\",",
+									"        \"id\": \"string\"",
+									"    },",
+									"    \"required\": [\"jsonrpc\", \"result\", \"id\"]",
+									"}",
+									"var move_schema = {",
+									"    \"$schema\": \"http://json-schema.org/draft-04/schema\",",
+									"    \"type\": \"array\",",
+									"    \"items\": [",
+									"        {",
+									"            \"type\": \"number\",",
+									"            \"minimum\": 0,",
+									"            \"maximum\": 2",
+									"        },",
+									"        {",
+									"            \"type\": \"number\",",
+									"            \"minimum\": 0,",
+									"            \"maximum\": 2",
+									"        },",
+									"        {",
+									"            \"type\": \"string\",",
+									"            \"enum\": [\"O\", \"X\"]",
+									"        }",
+									"  ]",
+									"};",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"// Make sure we are following JSON-RPC standard",
+									"tests[\"Response looks like jsonrpc\"] = tv4.validate(response, jsonrpc_schema);",
+									"tests[\"Returned 'id' is the same we sent\"] = (response.id === \"003\");",
+									"",
+									"tests[\"Result looks like a move\"] = tv4.validate(response.result, move_schema);",
+									"tests[\"Result should be an empty array indicating no moves\"] = (response.result.length === 0);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/index.php/jsonrpc/v2/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"makeMove\",\n\t\"params\": {\n\t\t\"boardState\": [\n\t\t\t[\"X\", \"O\", \"\"], \n\t\t  \t[\"X\", \"O\", \"\"], \n\t\t  \t[\"X\", \"\", \"\"]\n\t\t],\n\t\t\"player\": \"O\"\n\t},\n\t\"id\": \"003\"\n}"
+						},
+						"description": "When asked to make a move on a board that is already in \"finished\" state, API should return an empty array, indicating that no moves are available."
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

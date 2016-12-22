@@ -1,3 +1,14 @@
+# Release 1.3.0
+
+In Release 1.3.0 Bot was made smarter - now it prefers to make winning moves
+and tries to prevent opponent from winning. New smarter logic exposed at a
+new API entrypoint: `/jsonrpc/v2/`. Previous version of API is still available
+at `/jsonrpc/v1/`.
+
+Technically there was no need to bump API version number - the format is still
+the same, only the logic changed. But I needed an excuse to try maintaining
+two versions of API.
+
 # Release 1.2.0
 
 Board logic was improved - now Bot will refuse to make a move on a Board in

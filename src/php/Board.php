@@ -27,6 +27,7 @@ class Board
                 )
             ) != 3
         ) {
+            $this->last_error = 'Dimensions are wrong: ' . json_encode($board_state);
             return false;
         }
 
@@ -65,6 +66,10 @@ class Board
             return false;
         }
         return true;
+    }
+
+    public function isWinFor($player) {
+        return $this->isWin($this->flat_board, $player);
     }
 
     public function isWin($flat_board, $player = null) {
@@ -114,7 +119,7 @@ class Board
     public function fromArray($board_state)
     {
         if (!$this->isValid($board_state)) {
-            throw new \Exception("Invalid board");
+            throw new \Exception("Invalid board: " . $this->getLastError());
         }
 
         $flat_board = [];
@@ -133,6 +138,25 @@ class Board
         $this->flat_board = $flat_board;
     }
 
+    public function toArray()
+    {
+        // normalize flat board
+        $normalized_flat_board = array_map(
+            function($el) {
+                return ($el == '_') ? '' : $el;
+            },
+            $this->flat_board
+        );
+
+        return [
+            // don't you hate it when PHP syntax is diffent from normal one
+            // third param here is $length, not the end index like in JS
+            array_slice($normalized_flat_board, 0, 3),
+            array_slice($normalized_flat_board, 3, 3),
+            array_slice($normalized_flat_board, 6, 3)
+        ];
+    }
+
     public function findAvailableMoves()
     {
         $moves = [];
@@ -148,7 +172,7 @@ class Board
 
         $keys = array_filter($this->flat_board, $callback);
         foreach (array_keys($keys) as $index) {
-            $moves[] = [floor($index / $this->size), $index % $this->size];
+            $moves[] = [(int) floor($index / $this->size), $index % $this->size];
         }
         return $moves;
     }
