@@ -3,7 +3,7 @@ namespace Egoh\Controllers;
 
 class JsonRpc
 {
-    protected $container;
+    protected $container, $bot;
     public function __construct($container) {
         $this->container = $container;
     }
@@ -13,9 +13,11 @@ class JsonRpc
         // so just removing trailing slash in case it's there
         $mount_point = rtrim($mount_point, '/');
 
-        $app->group($mount_point, function() {
-            $this->post('/', function ($req, $res) {
-                $game = new \Egoh\TicTacToe();
+        $controller = $this;
+
+        $app->group($mount_point, function() use ($controller) {
+            $this->post('/', function ($req, $res) use ($controller) {
+                $game = $controller->bot;
                 $jsonrpc = json_decode($req->getBody(), true);
                 // let's skip validation for now
                 $board_state = $jsonrpc["params"]["boardState"];
@@ -36,5 +38,15 @@ class JsonRpc
                 }
             });
         });
+    }
+
+    public function configureVersion1()
+    {
+        $this->bot = new \Egoh\TicTacToe(new \Egoh\DumbBrain());
+    }
+
+    public function configureVersion2()
+    {
+        $this->bot = new \Egoh\TicTacToe(new \Egoh\SmartBrain());
     }
 }
