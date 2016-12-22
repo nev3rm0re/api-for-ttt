@@ -15,6 +15,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --hot",
+    "test": "./vendor/bin/phpunit",
     "test:newman:dev": "newman run tests/integration/Tictactoe.postman_collection.json -e build/test/develop.postman_environment.json --no-color",
     "test:newman:release": "newman run tests/integration/Tictactoe.postman_collection.json -e build/test/release.postman_environment.json --no-color",
     "webpack:watch": "webpack -d --watch",
