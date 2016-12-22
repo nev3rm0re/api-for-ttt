@@ -148,7 +148,7 @@ class Board
 
         $keys = array_filter($this->flat_board, $callback);
         foreach (array_keys($keys) as $index) {
-            $moves[] = [floor($index / $this->size), $index % $this->size];
+            $moves[] = [(int) floor($index / $this->size), $index % $this->size];
         }
         return $moves;
     }
