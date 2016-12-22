@@ -27,6 +27,7 @@ class Board
                 )
             ) != 3
         ) {
+            $this->last_error = 'Dimensions are wrong: ' . json_encode($board_state);
             return false;
         }
 
@@ -114,7 +115,7 @@ class Board
     public function fromArray($board_state)
     {
         if (!$this->isValid($board_state)) {
-            throw new \Exception("Invalid board");
+            throw new \Exception("Invalid board: " . $this->getLastError());
         }
 
         $flat_board = [];
