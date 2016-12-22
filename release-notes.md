@@ -1,3 +1,9 @@
+# Release 1.2.0
+
+Board logic was improved - now Bot will refuse to make a move on a Board in
+a win or illegal state. That's why I had to bump minor version - API
+expectations changed a bit.
+
 # Release 1.1.0
 
 This release contains eye-candy to the web client. Added hover effects,
