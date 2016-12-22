@@ -70,4 +70,19 @@ class BoardTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($board->isValidByRules());
     }
+
+
+    public function testToAndFromArray()
+    {
+        $board_state = [
+            ['X',  '', 'X'],
+            ['O', 'X', 'O'],
+            [ '',  '', 'O']
+        ];
+
+        $testee = new \Egoh\Board(3);
+        $testee->fromArray($board_state);
+
+        $this->assertEquals($board_state, $testee->toArray());
+    }
 }
