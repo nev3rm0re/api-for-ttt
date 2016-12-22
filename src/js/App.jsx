@@ -141,7 +141,7 @@ class Game extends React.Component {
                 "player": this.state.currentPlayer
             }
         };
-        axios.post("/jsonrpc/v1/", payload).then(
+        axios.post("/jsonrpc/v2/", payload).then(
             (response) => {
                 if (response.data.result && response.data.result.length == 3) {
                     this.move(response.data.result[0], response.data.result[1]);
