@@ -101,6 +101,17 @@ class TicTacToeTest extends \PHPUnit_Framework_TestCase
                     [1, 1, 'X'],
                     [2, 0, 'X'],
                 ]
+            ],
+            "Prevent opposing player from winning" => [
+                'board' => [
+                    ['X', 'O', ''],
+                    ['X',  '', ''],
+                    [ '',  '', '']
+                ],
+                'player' => 'O',
+                'expectedMoves' => [
+                    [2, 0, 'O']
+                ]
             ]
         ];
     }
