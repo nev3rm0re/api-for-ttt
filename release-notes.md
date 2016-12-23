@@ -1,3 +1,9 @@
+# Release 1.3.1
+
+This is a really minor update - just noticed that title of the page was still
+"React App". Kinda of a noob mistake, I know. Good thing it wasn't "Untitled
+Document", amirite?
+
 # Release 1.3.0
 
 In Release 1.3.0 Bot was made smarter - now it prefers to make winning moves
